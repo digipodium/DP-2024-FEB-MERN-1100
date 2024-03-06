@@ -1,9 +1,30 @@
-import React from 'react'
+'use client';
+import React, { useState } from 'react'
 
 const TodoList = () => {
 
+    const [taskArray, setTaskArray] = useState([]);
+
+    console.log(taskArray);
+
     const addNewTask = (e) => {
-        console.log(e.code);
+        // console.log(e.code);
+        if (e.code === 'Enter') {
+            console.log(e.target.value);
+
+            const newTask = { text: e.target.value, completed: false };
+            setTaskArray([newTask, ...taskArray]);
+            e.target.value = '';
+        }
+    }
+
+    const deleteTask = (index) => {
+        console.log(index);
+
+        const temp = taskArray;
+        temp.splice(index, 1);
+        setTaskArray([...temp]);
+
     }
 
     return (
@@ -18,11 +39,25 @@ const TodoList = () => {
                             type="text"
                             className='form-control border-primary border-3'
                             placeholder='Press Enter to add Task'
-                            onKeyDown={}
+                            onKeyDown={addNewTask}
                         />
 
                     </div>
-                    <div className="card-body"></div>
+                    <div className="card-body">
+
+                        {
+                            taskArray.map((task, index) => {
+                                return <div key={index} className='d-flex mb-3 justify-content-between'>
+                                    <p>{task.text}</p>
+                                    <button
+                                        onClick={() => { deleteTask(index) }}
+                                        className='btn btn-danger'
+                                    >Delete</button>
+                                </div>
+                            })
+                        }
+
+                    </div>
                 </div>
             </div>
 
