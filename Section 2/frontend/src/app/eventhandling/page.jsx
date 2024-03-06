@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React from 'react';
 
 const EventHandling = () => {
     return (
@@ -14,7 +14,6 @@ const EventHandling = () => {
 
             <input type="color" onChange={ (e) => { console.log( e.target.value ); } } />
             <input type="color" onChange={ (e) => { document.body.style.background = e.target.value } } />
-
         </div>
     )
 }
