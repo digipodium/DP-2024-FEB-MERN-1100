@@ -20,7 +20,6 @@ const TodoList = () => {
 
     const deleteTask = (index) => {
         console.log(index);
-
         const temp = taskArray;
         temp.splice(index, 1);
         setTaskArray([...temp]);
@@ -34,7 +33,6 @@ const TodoList = () => {
                 <h1 className='display-3 text-center fw-bold'>ToDo List</h1>
                 <div className='card shadow'>
                     <div className="card-header">
-
                         <input
                             type="text"
                             className='form-control border-primary border-3'
