@@ -1,7 +1,40 @@
+'use client';
+import { useFormik } from 'formik';
 import Link from 'next/link';
-import React from 'react'
+import React from 'react';
+import * as Yup from 'yup';
 
 const Signup = () => {
+
+  const signupValidationSchema = Yup.object().shape({
+    email: Yup.string().email('Email is invalid').required('Email is required'),
+    name: Yup.string().required('Name is required'),
+    password: Yup.string().required('Password is required').min(6, 'Too short')
+    .matches(/[a-z]/, 'password must contain lowercase letter')
+    .matches(/[A-Z]/, 'password must contain uppercase letter')
+    .matches(/[0-9]/, 'password must contain number')
+    .matches(/\W/, 'password must contain special symbol'),
+    cpassword: Yup.string().required('Confirm Password is required')
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+  })
+
+  const signupForm = useFormik({
+    initialValues: {
+      email: '',
+      name: '',
+      password: '',
+      cpassword: ''
+    },
+    onSubmit: (values, {resetForm}) => {
+
+      setTimeout(() => {
+        console.log(values);
+        resetForm();
+      }, 3000);
+    },
+    validationSchema: signupValidationSchema
+  })
+
   return (
     <section className="vh-100 bg-primary-subtle">
       <div className="container py-5 h-100">
@@ -31,13 +64,15 @@ const Signup = () => {
                     <h3 className="mb-5 text-primary fw-bold">
                       Registration Form
                     </h3>
-                    <form>
+                    <form onSubmit={signupForm.handleSubmit}>
 
                       <div class="mb-3">
                         <label for="" class="form-label">Email Address</label>
                         <input
                           type="text"
                           id="email"
+                          onChange={signupForm.handleChange}
+                          value={signupForm.values.email}
                           class="form-control"
                           placeholder=""
                         />
@@ -48,6 +83,8 @@ const Signup = () => {
                         <input
                           type="text"
                           id="name"
+                          onChange={signupForm.handleChange}
+                          value={signupForm.values.name}
                           class="form-control"
                           placeholder=""
                         />
@@ -56,22 +93,32 @@ const Signup = () => {
                       <div class="mb-3">
                         <label for="" class="form-label">Password</label>
                         <input
-                          type="password"
+                          type="text"
                           id="password"
+                          onChange={signupForm.handleChange}
+                          value={signupForm.values.password}
                           class="form-control"
                           placeholder=""
                         />
-                        <small class="text-muted">Enter Strong Password</small>
+                        {
+                          signupForm.touched.password &&
+                          <small class="text-danger">{signupForm.errors.password}</small>
+                        }
                       </div>
                       <div class="mb-3">
                         <label for="" class="form-label">Confirm Password</label>
                         <input
                           type="password"
                           id="cpassword"
+                          onChange={signupForm.handleChange}
+                          value={signupForm.values.cpassword}
                           class="form-control"
                           placeholder=""
                         />
-                        <small class="text-muted">Passwords Must Match</small>
+                        {
+                          signupForm.touched.cpassword &&
+                          <small class="text-danger">{signupForm.errors.cpassword}</small>
+                        }
                       </div>
                       <div className="form-check mb-4">
                         <input
@@ -92,7 +139,7 @@ const Signup = () => {
                         <button type="button" className="btn btn-light">
                           Reset all
                         </button>
-                        <button type="submit" className="btn btn-primary ms-2">
+                        <button disabled={signupForm.isSubmitting} type="submit" className="btn btn-primary ms-2">
                           Submit form
                         </button>
                       </div>
