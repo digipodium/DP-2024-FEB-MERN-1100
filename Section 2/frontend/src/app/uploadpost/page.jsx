@@ -12,6 +12,13 @@ const UploadPost = () => {
             postedOn: new Date()
         },
         onSubmit: (values) => {
+            
+            // making a request to backend server
+            fetch('http://localhost:5000/post/add', {
+                method: 'POST',
+                body: values
+            })
+
             console.log(values);
         }
     })
