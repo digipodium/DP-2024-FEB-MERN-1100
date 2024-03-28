@@ -16,8 +16,16 @@ const UploadPost = () => {
             // making a request to backend server
             fetch('http://localhost:5000/post/add', {
                 method: 'POST',
-                body: values
+                body: JSON.stringify(values),
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
             })
+            .then((response) => {
+                console.log(response.status);
+            }).catch((err) => {
+                console.log(err);
+            });
 
             console.log(values);
         }
